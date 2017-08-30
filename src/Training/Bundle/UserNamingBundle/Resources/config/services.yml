@@ -19,6 +19,7 @@ services:
         arguments:
             - '@doctrine'
             - '@request_stack'
+            - '@security.authorization_checker'
         tags:
             - { name: kernel.event_listener, event: oro_ui.scroll_data.before.userView, method: onUserView }
 

@@ -3,6 +3,7 @@
 namespace Training\Bundle\UserNamingBundle\EventListener;
 
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -16,14 +17,22 @@ class UserViewNamingListener
     /** @var RequestStack */
     private $requestStack;
 
+    /** @var AuthorizationCheckerInterface */
+    private $authorizationChecker;
+
     /**
      * @param ManagerRegistry $registry
      * @param RequestStack $requestStack
+     * @param AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(ManagerRegistry $registry, RequestStack $requestStack)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        RequestStack $requestStack,
+        AuthorizationCheckerInterface $authorizationChecker
+    ) {
         $this->registry = $registry;
         $this->requestStack = $requestStack;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -31,6 +40,10 @@ class UserViewNamingListener
      */
     public function onUserView(BeforeListRenderEvent $event)
     {
+        if (!$this->authorizationChecker->isGranted('training_user_naming_info')) {
+            return;
+        }
+
         $userId = $this->requestStack->getCurrentRequest()->get('id');
         if (!$userId) {
             return;
