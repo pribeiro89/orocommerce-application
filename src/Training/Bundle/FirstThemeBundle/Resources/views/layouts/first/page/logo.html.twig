@@ -1,0 +1,15 @@
+{% block _logo_widget %}
+    {% if app.request.attributes.get('_route') == 'oro_frontend_root' %}
+        <img
+            src="{{ asset('bundles/trainingfirsttheme/first/images/first_logo.png') }}"
+            class="logo"
+            alt="logo"
+        >
+    {% else %}
+        <a href="{{ path('oro_frontend_root') }}" class="logo" style="background: url('{{ asset('bundles/trainingfirsttheme/first/images/first_logo.png') }}') no-repeat;">OROCommerce</a>
+    {% endif %}
+{% endblock %}
+
+{% block _logo_hint_widget %}
+    <div>First logo hint...</div>
+{% endblock %}
